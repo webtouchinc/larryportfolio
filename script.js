@@ -41,59 +41,52 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(type, 1000);
 });
 
-// Mobile Navigation
-const hamburger = document.querySelector('.hamburger');
-const navLinks = document.querySelector('.nav-links');
-
-hamburger.addEventListener('click', () => {
-    navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
-});
-
 // Form Handling
-const contactForm = document.getElementById('contact-form');
-const submitButton = contactForm.querySelector('.submit-btn');
-
-contactForm.addEventListener('submit', (e) => {
+function sendEmail(e) {
     e.preventDefault();
+    
+    const submitButton = document.querySelector('.submit-btn');
     
     // Disable submit button and show loading state
     submitButton.disabled = true;
     submitButton.textContent = 'Sending...';
     
     // Get form values
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const message = document.getElementById('message').value;
+    const templateParams = {
+        from_name: document.getElementById('name').value,
+        from_email: document.getElementById('email').value,
+        message: document.getElementById('message').value,
+        to_name: "Touani Larry",
+        to_email: "touanilarry@gmail.com"
+    };
     
     // Send email using EmailJS
-    emailjs.send(
-        "service_f9djakl", // EmailJS service ID
-        "template_dtojsgr", // EmailJS template ID
-        {
-            from_name: name,
-            from_email: email,
-            message: message,
-            to_name: "Touani Larry",
-            to_email: "touanilarry@gmail.com"
-        }
-    ).then(
-        function(response) {
+    emailjs.send(EMAIL_CONFIG.SERVICE_ID, EMAIL_CONFIG.TEMPLATE_ID, templateParams)
+        .then(function(response) {
             console.log("SUCCESS", response);
-            // Show success message
             alert('Thank you for your message! I will get back to you soon.');
-            // Reset form
-            contactForm.reset();
-        },
-        function(error) {
+            document.getElementById('contact-form').reset();
+        })
+        .catch(function(error) {
             console.log("FAILED", error);
-            // Show error message
             alert('Oops! Something went wrong. Please try again later.');
-        }
-    ).finally(() => {
-        // Re-enable submit button
-        submitButton.disabled = false;
-        submitButton.textContent = 'Send Message';
-    });
+        })
+        .finally(() => {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Send Message';
+        });
+        
+    return false;
+}
+
+document.getElementById('contact-form').addEventListener('submit', sendEmail);
+
+// Mobile Navigation
+const hamburger = document.querySelector('.hamburger');
+const navLinks = document.querySelector('.nav-links');
+
+hamburger.addEventListener('click', () => {
+    navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
 });
 
 // Smooth scrolling for navigation links
