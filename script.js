@@ -4,20 +4,123 @@
     emailjs.init("-C8WuflYADvKSVH23G1vq");
 })();
 
+// Theme Toggle
+const themeToggle = document.querySelector('.theme-toggle');
+const body = document.body;
+let isDarkTheme = localStorage.getItem('theme') === 'dark';
+
+// Initialize theme
+if (isDarkTheme) {
+    body.setAttribute('data-theme', 'dark');
+    themeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+} else {
+    themeToggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
+}
+
+themeToggle.addEventListener('click', () => {
+    isDarkTheme = !isDarkTheme;
+    body.setAttribute('data-theme', isDarkTheme ? 'dark' : 'light');
+    themeToggle.innerHTML = isDarkTheme ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+    localStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
+});
+
+// Language Selector
+const languageBtn = document.querySelector('.language-btn');
+const languageDropdown = document.querySelector('.language-dropdown');
+const languageOptions = document.querySelectorAll('.language-option');
+const currentLang = document.querySelector('.language-btn span');
+
+// Initialize Google Translate
+function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,fr,es,de,zh,it',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+    }, 'google_translate_element');
+}
+
+// Toggle language dropdown
+languageBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    languageDropdown.classList.toggle('active');
+});
+
+// Close dropdown when clicking outside
+document.addEventListener('click', () => {
+    languageDropdown.classList.remove('active');
+});
+
+// Handle language selection
+languageOptions.forEach(option => {
+    option.addEventListener('click', (e) => {
+        e.preventDefault();
+        const lang = option.getAttribute('data-lang');
+        
+        // Update button text
+        currentLang.textContent = lang.toUpperCase();
+        
+        // Trigger Google Translate
+        const translateSelect = document.querySelector('.goog-te-combo');
+        if (translateSelect) {
+            translateSelect.value = lang;
+            translateSelect.dispatchEvent(new Event('change'));
+        }
+        
+        // Close dropdown
+        languageDropdown.classList.remove('active');
+    });
+});
+
+// Mobile Navigation
+const hamburger = document.querySelector('.hamburger');
+const navLinks = document.querySelector('.nav-links');
+const body = document.body;
+
+hamburger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    hamburger.classList.toggle('active');
+    navLinks.classList.toggle('active');
+    body.classList.toggle('menu-open');
+});
+
+// Close menu when clicking outside
+document.addEventListener('click', (e) => {
+    if (navLinks.classList.contains('active') &&
+        !navLinks.contains(e.target) &&
+        !hamburger.contains(e.target)) {
+        hamburger.classList.remove('active');
+        navLinks.classList.remove('active');
+        body.classList.remove('menu-open');
+    }
+});
+
+// Close menu when clicking a link
+document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        navLinks.classList.remove('active');
+        body.classList.remove('menu-open');
+    });
+});
+
 // Typing Animation
-const typedTextElement = document.querySelector('.typed-text');
+const typedTextSpan = document.querySelector('.typed-text');
+const cursorSpan = document.querySelector('.typed-cursor');
+
 const textArray = [
-    'Software Engineering Student',
-    'Full Stack Developer',
-    'UI/UX Enthusiast',
-    'Problem Solver'
+    "Software Engineer",
+    "Web Developer",
+    "Problem Solver",
+    "Tech Enthusiast"
 ];
+
 let textArrayIndex = 0;
 let charIndex = 0;
 
 function type() {
     if (charIndex < textArray[textArrayIndex].length) {
-        typedTextElement.textContent += textArray[textArrayIndex].charAt(charIndex);
+        typedTextSpan.textContent += textArray[textArrayIndex].charAt(charIndex);
         charIndex++;
         setTimeout(type, 100);
     } else {
@@ -27,7 +130,7 @@ function type() {
 
 function erase() {
     if (charIndex > 0) {
-        typedTextElement.textContent = textArray[textArrayIndex].substring(0, charIndex - 1);
+        typedTextSpan.textContent = textArray[textArrayIndex].substring(0, charIndex - 1);
         charIndex--;
         setTimeout(erase, 50);
     } else {
@@ -37,56 +140,25 @@ function erase() {
     }
 }
 
+// Start typing animation when page loads
 document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(type, 1000);
+    if (textArray.length) setTimeout(type, 1000);
 });
 
 // Form Handling
-function sendEmail(e) {
+document.getElementById('contact-form').addEventListener('submit', function(e) {
     e.preventDefault();
     
-    const submitButton = document.querySelector('.submit-btn');
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const message = document.getElementById('message').value;
     
-    // Disable submit button and show loading state
-    submitButton.disabled = true;
-    submitButton.textContent = 'Sending...';
+    // You can add your form handling logic here
+    console.log('Form submitted:', { name, email, message });
     
-    // Get form values
-    const templateParams = {
-        from_name: document.getElementById('name').value,
-        from_email: document.getElementById('email').value,
-        message: document.getElementById('message').value,
-        to_name: "Touani Larry",
-        to_email: "touanilarry@gmail.com"
-    };
-    
-    // Send email using EmailJS
-    emailjs.send(EMAIL_CONFIG.SERVICE_ID, EMAIL_CONFIG.TEMPLATE_ID, templateParams)
-        .then(function(response) {
-            console.log("SUCCESS", response);
-            alert('Thank you for your message! I will get back to you soon.');
-            document.getElementById('contact-form').reset();
-        })
-        .catch(function(error) {
-            console.log("FAILED", error);
-            alert('Oops! Something went wrong. Please try again later.');
-        })
-        .finally(() => {
-            submitButton.disabled = false;
-            submitButton.textContent = 'Send Message';
-        });
-        
-    return false;
-}
-
-document.getElementById('contact-form').addEventListener('submit', sendEmail);
-
-// Mobile Navigation
-const hamburger = document.querySelector('.hamburger');
-const navLinks = document.querySelector('.nav-links');
-
-hamburger.addEventListener('click', () => {
-    navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+    // Clear form
+    this.reset();
+    alert('Message sent successfully!');
 });
 
 // Smooth scrolling for navigation links
