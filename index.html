@@ -7,49 +7,50 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<!-- Add EmailJS SDK -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script src="config.js"></script>
-    <script>
-        (function() {
-            emailjs.init(EMAIL_CONFIG.PUBLIC_KEY);
-        })();
-    </script>
-
 </head>
 <body>
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-logo">Larry's Portfolio</div>
+        <button class="hamburger" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
         <ul class="nav-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#skills">Skills</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="#about"><i class="fas fa-user"></i> About</a></li>
+            <li><a href="#skills"><i class="fas fa-code"></i> Skills</a></li>
+            <li><a href="#projects"><i class="fas fa-project-diagram"></i> Projects</a></li>
+            <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
         </ul>
-        <div class="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
     </nav>
 
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-content">
-            <h1>Hello, I'm <span class="highlight">Touani Gakam Goumo Giovanni Larry</span></h1>
-            <p class="typed-text"></p>
-            <div class="social-links">
-                <a href="https://github.com/webtouchinc" target="_blank"><i class="fab fa-github"></i></a>
-                <a href="https://www.linkedin.com/in/larry-touani-52717b251" target="_blank"><i class="fab fa-linkedin"></i></a>
-                <a href="https://x.com/Giovans_fb?s=09" target="_blank"><i class="fab fa-twitter"></i></a>
-                <a href="https://www.instagram.com/giovans_fb" target="_blank"><i class="fab fa-instagram"></i></a>
+            <div class="profile-container">
+                <img src="profile.jpg" alt="Touani Larry" class="profile-picture">
             </div>
-            <a href="#contact" class="cta-button">Get In Touch</a>
+            <div class="hero-text">
+                <h1>Hello, I'm <span class="highlight">Touani Larry</span></h1>
+                <div class="typing-container">
+                    <span class="typed-text">A Software Engineer</span>
+                    <span class="typed-cursor">A Web Developer</span>
+                </div>
+                <div class="social-links">
+                    <a href="https://github.com/webtouchinc" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/larry-giovanni-touani-52717b251" target="_blank"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://x.com/Giovans_fb?s=09" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/giovans_fb" target="_blank"><i class="fab fa-instagram"></i></a>
+                </div>
+                <div class="cta-buttons">
+                    <a href="#contact" class="cta-button">Get In Touch</a>
+                    <a href="cv.pdf" download class="cta-button cv-button"><i class="fas fa-download"></i> Download CV</a>
+                </div>
+            </div>
         </div>
     </section>
-
     <!-- About Section -->
     <section id="about" class="about">
         <h2>About Me</h2>
@@ -202,17 +203,17 @@
                     <p><a href="mailto:touanilarry@gmail.com">touanilarry@gmail.com</a></p>
                 </div>
             </div>
-            <form id="contact-form">
+            <form action="https://formspree.io/f/xyzkqoqq" method="POST" id="contact-form">
                 <div class="form-group">
-                    <input type="text" id="name" required>
+                    <input type="text" id="name" name="name" required>
                     <label for="name">Name</label>
                 </div>
                 <div class="form-group">
-                    <input type="email" id="email" required>
+                    <input type="email" id="email" name="email" required>
                     <label for="email">Email</label>
                 </div>
                 <div class="form-group">
-                    <textarea id="message" required></textarea>
+                    <textarea id="message" name="message" required></textarea>
                     <label for="message">Message</label>
                 </div>
                 <button type="submit" class="submit-btn">Send Message</button>
